@@ -1,0 +1,110 @@
+#!/usr/bin/env python3
+
+# chef - A gemtext -> HTML template processor
+
+from typing import TextIO
+import argparse
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="chef",
+        description="A gemtext -> HTML template processor",
+        epilog="The template can access vars defined with -d using "
+            "the $(var) syntax. The CONTENT and TITLE variables are "
+            "predefined."
+    )
+
+    parser.add_argument("gemtext")
+    parser.add_argument("-o", "--outfile", required=True)
+    parser.add_argument("-t", "--template", default="template.html")
+    parser.add_argument("-d", "--define", nargs=2, action="append")
+
+    return parser.parse_args()
+
+def tohtml(gem: TextIO) -> (str, str):
+    preformatted = False
+    in_list = False
+    html_parts = []
+    title = None
+
+    for raw_line in gem:
+        l = raw_line.rstrip("\n")
+
+        if l.startswith("```") and not preformatted:
+            preformatted = True
+            if in_list:
+                html_parts.append("</ul>")
+                in_list = False
+            html_parts.append("<pre>")
+            continue
+        if l == "```" and preformatted:
+            preformatted = False
+            html_parts.append("</pre>")
+            continue
+
+        if preformatted:
+            html_parts.append(l + "\n")
+            continue
+
+        if l.startswith("* "):
+            if not in_list:
+                html_parts.append("<ul>")
+                in_list = True
+            html_parts.append(f"<li>{l[2:]}</li>")
+            continue
+
+        if in_list:
+            html_parts.append("</ul>")
+            in_list = False
+
+        if l.startswith("### "):
+            html_parts.append(f"<h3>{l[4:]}</h3>")
+        elif l.startswith("## "):
+            html_parts.append(f"<h2>{l[3:]}</h2>")
+        elif l.startswith("# "):
+            if title == None: title = l[2:]
+            html_parts.append(f"<h1>{l[2:]}</h1>")
+        elif l.startswith("=> "):
+            parts = l[3:].split(" ")
+            if len(parts) == 0: continue
+            url = parts[0]
+            text = " ".join(parts[1:]) if len(parts) > 1 else url
+            html_parts.append(f"<a href=\"{url}\">{text}</a>")
+        elif l.strip() == "":
+            continue
+        else:
+            html_parts.append(f"<p>{l}</p>")
+
+    if in_list:
+        html_parts.append("</ul>")
+
+    return "".join(html_parts), title or "Untitled"
+
+def apply_vars(template: str, vars_dict: dict) -> str:
+    if not vars_dict:
+        return template
+
+    def repl(m: re.Match) -> str:
+        name = m.group(1)
+        return vars_dict.get(name, m.group(0))
+    return VARIABLE.sub(repl, template)
+
+def main() -> None:
+    args = parse_args()
+
+    with open(args.template, "r", encoding="utf-8") as f:
+        template = f.read()
+
+    with open(args.gemtext, "r", encoding="utf-8") as gem, \
+         open(args.outfile, "w", encoding="utf-8") as out:
+        content, title = tohtml(gem)
+        output = apply_vars(template, getattr(args, "vars", {}) or {})
+        output = output.replace("$(CONTENT)", content)
+        output = output.replace("$(TITLE)",   title)
+        for k,v in args.define:
+            output = output.replace(f"$({k})", v)
+        out.write(output)
+
+if __name__ == "__main__":
+    main()
+

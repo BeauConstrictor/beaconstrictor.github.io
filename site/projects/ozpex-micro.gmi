@@ -1,0 +1,50 @@
+# Ozpex Micro
+
+The Ozpex Micro is a fictional, extensible 8-bit computer architecture similar in intent to the IBM PC de facto standard, but designed to be easy to comprehend and develop software for.
+
+```
+            .---.
+           /     \
+           \.@-@./
+           /`\_/`\
+          //  _  \\
+         | \     )|_
+        /`\_`>  <_/ \
+     jgs\__/'---'\__/
+```
+
+At its core, the Ozpex Micro is essentially a standard that emulators and motherboards must follow in order to be labelled 'Ozpex Micro-compatible'. I have developed an emulator (and small BIOS) for this architecture so that I can run software that I design for it without having to build a physical, compliant computer.
+
+=> https://github.com/beauconstrictor/ozpex-micro Check out the Github repository for this project if you want to try it out.
+=> /projects/os-micro.gmi If you want to get some serious software running on the Micro, you can try to boot my custom operating system, OS/M.
+
+## Designing the spec
+
+I began this project simply because I had an idea in my head: I wanted to create a computer architecture that people who (like me) are fascinated by low-level computing systems and standards can develop software for without the headaches of ensuring compliance with the backward-compatible mess that makes up modern computers.
+
+At the core of the spec is the the block device system. A motherboard or emulator can support up to 256 different block devices - expansion cards with standardised APIs that allow each and every unique hardware configuration to be recognised and accepted gracefully by the operating system.
+
+Complementing the block device system are the 256 different serial ports. Unlike the much more general purpose block devices, these are easy-access ports that progams can write bytes to to get them to appear on the screen or a printer. Software can't enumerate these ports like they can with block devices, so they are usually used when a user decides to print a file. The program will prompt the user for the number of a serial port and it will just write the bytes to it, no questions asked. Serial port 0 is a special case that is guaranteed to map to the computer's terminal or display, and is the primary way of interacting with the computer.
+
+I chose the Z80 microprocessor - the cult-classic 8-bit CPU that powered CP/M, the real historical operating system that OS/M draws many parallels to.
+
+## Building the emulator
+
+For the emulator, I quickly began to implement the Z80's ISA in C with little direction. That's when I decided to incorporate the Ozpex 128's design, but modified to better fit the Z80. Most of the architecture's defining features are implemented in the source file '/src/bdev.c', which implements the block device system.
+
+=> https://github.com/beauconstrictor/ozpex-128 An earlier project of mine that I wrote a 6502 emulator for. This project is where most of the Ozpex Micro's philosophy originated.
+
+```
+$ ozm --help
+ozm (Ozpex Micro Emulator) v0.1.0
+Copyright (c) 2026 Beau Constrictor
+License GPLv2: GNU GPL version 2 <https://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by Beau Constrictor.
+```
+
+This emulator was my first foray into proper command-line option parsing in C, so I was intrigued to learn about 'getopt', the standard iterator-based way of implementing options.
+
+The emulator is still not even remotely finished, and only supports about 15% of the Z80's instructions, but in practice this covers 95% of the instructions that you actually use.

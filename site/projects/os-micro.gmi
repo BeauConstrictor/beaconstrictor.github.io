@@ -1,0 +1,52 @@
+# OS/Micro
+
+OS/Micro is a disk operating system for the Ozpex Micro computer architecture.
+
+```
+                          _______
+                         | ___  o|
+                         |[_-_]_ |
+      ______________     |[_____]|
+     |.------------.|    |[_____]|
+     || OS/M       ||    |[====o]|
+     || $_         ||    |[_.--_]|
+     ||            ||    |[_____]|
+     ||            ||    |      :|
+     ||____________||    |      :|
+ .==.|""  ......    |.==.|      :|
+ |::| '-.________.-' |::||      :|
+ |''|  (__________)-.|''||______:|
+ `""`_.............._\""`______
+    /:::::::::::'':::\`;'-.-.  `\
+   /::=========.:.-::"\ \ \--\   \
+   \`""""""""""""""""`/  \ \__)   \
+jgs `""""""""""""""""`    '========'
+```
+
+OS/Micro has a unique architecture that heavily leans on the extensibility and discoverability of the Ozpex Micro itself. This allows the concept of drivers and standard system calls to be completely omitted, in favour of programs simply statically linking all the runtime support they will need.
+
+Because of this, the OS will not run on any old computer, but Ozpex Micro-compatible computers specifically. This is a computer architecture that I personally created, inspired by the IBM PC de-facto standard, and the CP/M operating system. Where the Ozpex Miceo stands out is in its simplicity, making development a breeze despite being forced to do so in Z80 assembly.
+
+=> /projects/ozpex-micro.gmi See my dedicated page for the Ozpex Micro if you are curious, or want to set one up to try out this OS.
+=> https://github.com/beauconstrictor/os-micro Check out the Github repository for this project if you want to try it out.
+
+## Inspiration
+
+I started OS/M (and the entirety of the Ozpex Micro) after discovering the Forth programming language. I liked the idea of writing a JIT compiler for it, but wasn't sure how to approach this in C, my usual language. Instead, I began to rationalise the completely unhinged idea of designing an entirely new computer architecture, bootloader, operating system and filesystem from scratch all to host the language.
+
+## Stand-out Features
+
+* DX - OS/M is a refreshingly easy system to target, without complex APIs or legacy mess.
+* Custom filesystem - OS/128 uses a custom designed flat filesystem that fits perfectly on Ozpex Micro disks and is incredibly simple and fast.
+* Simplicity - A single person can easily understand the entire OS stack, making OS/M a great learning tool if you want to read open source code.
+
+## Implementation
+
+The operating system is split into 3 main components:
+
+* The bootloader: the first program started at boot-time, executes a special file called kernel.sys
+* The standard libraries - statically linked in every executable, including the shell, these libraries implement I/O, the filesystem, and device control.
+* The shell - an executable like any other, except loaded at a special address so it can exist alongside another program. Stored in the hidden file '_k'.
+* Forth - a JIT compiler of a modified version of the FORTH language that allows you to develop software on-device in the included text editor.
+
+Each of these components builds on the last to finally create a usable system.

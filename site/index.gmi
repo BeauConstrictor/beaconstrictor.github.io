@@ -1,0 +1,44 @@
+# BeauConstrictor's Place
+
+Hello! I'm Beau.
+
+```
+  ~         ~~          __
+       _T      .,,.    ~--~ ^^
+ ^^   // \                    ~
+      ][O]    ^^      ,-~ ~
+   /''-I_I         _II____
+__/_  /   \ ______/ ''   /'\_,__
+  | II--'''' \,--:--..,_/,.-{ },
+; '/__\,.--';|   |[] .-.| O{ _ }
+:' |  | []  -|   ''--:.;[,.'\,/
+'  |[]|,.--'' '',   ''-,.    |
+  ..    ..-''    ;       ''. '
+
+```
+
+I'm a low-level systems developer and retro enthusiast. I saw computers from the '70s, '80s and '90s as much simpler, so I spend much of my development time trying to create systems that expose you to the deeper layers of your software stack - early software did this out of necessity, but my programs do it for two very different reasons: education and fun.
+
+I'm not a frontend developer, so this website isn't some flashy design project, but you can reach these pages from 4 different internet protocols, all of which I have implemented from scratch in Nim. See my project 'Quadraserve' if you're curious.
+
+## My projects
+
+These are some of the larger projects that I have worked on recently. You can find more on my Github profile.
+
+=> /projects/madlad.html Madlad - A modular text editor for Unix
+=> /projects/ozpex-micro.html Ozpex Micro - An 8-bit computer architecture designed for extensibility
+=> /projects/os-micro.html OS/Micro - A full operating system stack and programming language for the Ozpex Micro
+
+=> https://github.com/beauconstrictor My Github profile
+
+## My skills
+
+I am a self-taught software developer, and have been for 6 years. I got started in the space as most do, by learning Python. I still occasionally use Python as it is indeed an excellent language for quick scripting. However, in the time since I began programming, I have become increasingly curious about how exactly my computer executes the code I write.
+
+This has since led me down a rabbit-hole of learning C, and eventually Assembly (albeit for the 6502 and Z80 architectures), which has undoubtedly improved my understanding of the workings of CPUs - but a functioning machine is more than just a CPU. 
+
+This is lead me to create the Ozpex Micro, where I have designed and implemented an emulator for an entirely custom computer architecture and written a BIOS, bootloader, kernel, filesystem and programming language entirely from scratch, all in assembly to run on that system.
+
+## Contact me
+
+=> mailto:$(EMAIL) By email: $(EMAIL)
