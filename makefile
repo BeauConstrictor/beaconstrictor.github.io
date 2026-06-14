@@ -8,7 +8,7 @@ VARS += -d EMAIL foil-ivory-glutton@duck.com
 
 .PHONY: all
 all:
-	@sh -ec '\
+	@bash -ec '\
 		rm "$(OUT)" -rf; \
 		find "$(IN)" -print0 | while IFS= read -r -d "" file; do \
 		outpath="$(OUT)/$${file#$(SITE)}"; \
