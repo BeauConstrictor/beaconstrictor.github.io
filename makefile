@@ -9,9 +9,9 @@ VARS += -d EMAIL foil-ivory-glutton@duck.com
 .PHONY: all
 all:
 	@bash -ec '\
-		rm "$(OUT)" -rf; \
+		rm -rf "$(OUT)"; \
 		find "$(IN)" -print0 | while IFS= read -r -d "" file; do \
-		outpath="$(OUT)/$${file#$(SITE)}"; \
+		outpath="$(OUT)/$${file#site/}"; \
 		src="$$file"; \
 		case "$$outpath" in \
 			*.gmi) outpath="$${outpath%.*}.html" ;; \
@@ -26,8 +26,8 @@ all:
 
 .PHONY: clean
 clean:
-	rm "$(OUT)" -rf
+	rm -rf "$(OUT)"
 
 .PHONY: run
 run: all
-	@python -m http.server -d "$(OUT)/$(IN)"
+	@python -m http.server -d "$(OUT)/"
