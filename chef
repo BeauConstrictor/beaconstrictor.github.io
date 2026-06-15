@@ -80,15 +80,6 @@ def tohtml(gem: TextIO) -> (str, str):
 
     return "".join(html_parts), title or "Untitled"
 
-def apply_vars(template: str, vars_dict: dict) -> str:
-    if not vars_dict:
-        return template
-
-    def repl(m: re.Match) -> str:
-        name = m.group(1)
-        return vars_dict.get(name, m.group(0))
-    return VARIABLE.sub(repl, template)
-
 def main() -> None:
     args = parse_args()
 
@@ -98,7 +89,7 @@ def main() -> None:
     with open(args.gemtext, "r", encoding="utf-8") as gem, \
          open(args.outfile, "w", encoding="utf-8") as out:
         content, title = tohtml(gem)
-        output = apply_vars(template, getattr(args, "vars", {}) or {})
+        output = template
         output = output.replace("$(CONTENT)", content)
         output = output.replace("$(TITLE)",   title)
         for k,v in args.define:

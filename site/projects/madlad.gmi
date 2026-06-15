@@ -22,11 +22,11 @@ Madlad's main standout feature is it's modularity. All commands and plugins are 
 
 At the core of Madlad's modular scripting system is CSRPC, a tiny C library intended as an alternate to including a big scripting language dependency in your project - which is oftentimes larger than the project itself - or (god forbid) rolling your own DSL.
 
-=> https://github.com/beauconstricor/csrpc CSRPC on Github
+=> https://github.com/beauconstrictor/csrpc CSRPC on Github
 
-When you tell CSRPC to execute a command, it simply calls out to the shell to run that command and captures it's output. However, it always prefixes your command with a small script that defines your project's domain-specific environment (special programs in path, small base functions and so on). Everything is built in layers on top of CSRPC's base binary, 'sv' that is able to send messages back to CSRPC as the command runs.
+When you tell CSRPC to execute a command, it simply calls out to the shell to run that command and captures it's output. However, it always prefixes your command with a small script that defines your project's domain-specific environment (special programs in path, small base functions and so on). Everything is built in layers on top of CSRPC's base binary, 'sc' that is able to send messages back to CSRPC as the command runs.
 
-CSRPC blocks for the lifetime of the command and listens for messages during that time. If a message is recieved, it is passed as-is to the project to handle it. In the case of Madlad, these messages implement base operations like inserting text, moving the cursor and changing settings.
+CSRPC blocks for the lifetime of the command and listens for messages during that time. If a message is received, it is passed as-is to the project to handle it. In the case of Madlad, these messages implement base operations like inserting text, moving the cursor and changing settings.
 
 ## Syntax highlighting
 
@@ -35,3 +35,52 @@ In order to keep the codebase small, I didn't implement an LSP server or other f
 ## Text model
 
 Madlad uses a rather unique model to represent text internally. In technical terms, a buffer is represented as a linked list of fixed-length line strings, with a separate gap buffer representing changes made to the current line. When you change line, those changes are flushed back to the linked list and the contents of the gap buffer are marked as irrelevant. Then, when you make your first edit in a different line, that line's contents are copied into the gap buffer and the change is made. This keeps edits fast and allows a primitive single-step undo of certain types of operations (by simply discarding the gap buffer). However, you can't undo things like entire line deletions as they never have to bother with the gap buffer in the first place.
+
+## DSH
+
+The environment created by CSRPC and the various base wrapper commands around it that Madlad implements is called DSH, short for domain-specific shell, although this is still of course POSIX sh.
+
+Commands are layered on top of each other to create increasingly abstract behaviours, and you can access commands from any one of these layers to most conveniently represent what you want to do.
+
+For example, there is a base command 'getv' that returns the value of a Madlad state variable. Then there is an abbreviation called 'g' that is defined like this:
+
+```
+g() { getv $@; }
+```
+
+Some of these state variables (referred to as 'states' from now on) are so-called 'flags' - boolean values. Get returns the strings 'yes' and 'no' to represent these booleans, which can be cumbersome to work with from within a shell script, so you could implement a wrapper command called 'check-flag' like this:
+
+```
+val=$(getv "$@")
+[ "$val" = "no" ] && exit 1
+```
+
+This command wraps 'getv' to return a flag's boolean value as an exit code. Then, you can do checks like this:
+
+```
+if check-flag unsaved; then
+  echo "unsaved :("
+else
+  echo "saved :)"
+fi
+```
+
+Checks like this will eventually be included in common commands like 'quit' and 'edit' to make sure you save your changes before running them. In-keeping with POSIX style, a '-f' flag like ':q -f' will be used in place of the vim-style ':!q'.
+
+## Base commands
+
+After revealing these abstractions that power the commands in Madlad, you might be left wondering how the base commands work. In reality, the base commands are just thin wrappers around 'sc', the IPC client binary provided CSRPC. This command sends it's arguments as a message to Madlad, which is what actually handles base commands. For example, the 'getv' base command is implemented like this:
+
+```
+getv() { sc getv $@; } # variable
+```
+
+As you can see, it really is a thin wrapper. These wrappers exist to hide the internals of CSRPC, and there is a wrapper for every possible 'sc' command, so you never need to touch 'sc' directly.
+
+## The name
+
+There's not really much of a story behind the name 'Madlad'. It
+started of as 'Medled', meaning 'Line editor; modal editor' but that
+sounded weird so i just changed it to the common phrase 'Mad lad',
+which I suppose reflects the 'mad' nature of using shell scripts for
+everything, but you really shouldn't read too deep into it.
