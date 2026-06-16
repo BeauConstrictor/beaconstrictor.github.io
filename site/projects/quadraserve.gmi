@@ -23,7 +23,7 @@ Quadraserve is primarily a static web server that serves files from a directory,
 
 ## Modules
 
-Quadraserve's interactivity comes from a system of 'modules', which behave like API endpoints that send and recieve strings of text (both optional). Pages can have buttons and forms of sorts in the form of links to modules, which are automatically recognised and prompt the user for input before calling the endpoint and displaying the result.
+Quadraserve's interactivity comes from a system of 'modules', which behave like API endpoints that send and receive strings of text (both optional). Pages can have buttons and forms of sorts in the form of links to modules, which are automatically recognised and prompt the user for input before calling the endpoint and displaying the result.
 
 Modules can be used for a variety of simple systems, all in-keeping with the small-web feel of Quadraserve. Some examples:
 
@@ -42,4 +42,4 @@ Each protocol handler compiles down to a separate binary which are all staticall
 
 Gemini is the most first-class protocol, as pages are written in Gemtext, the protocol's markup language. The module system also naturally translate to Gemini's special response codes that request the client for user input.
 
-For other protocols, the Gemtext source is translated on-the-fly to the protocols most appropriate format and then the response is sent. For Gopher and Finger, the source is more-or-less downgreaded to plaintext. For HTTP, the source is converted to markup and inserted into a page template, which you can design yourself. A template is also provided that resembles the page your own right now!
+For other protocols, the Gemtext source is translated on-the-fly to the protocols most appropriate format and then the response is sent. For Gopher and Finger, the source is more-or-less downgraded to plaintext. For HTTP, the source is converted to markup and inserted into a page template, which you can design yourself. A template is also provided that resembles the page your own right now!
