@@ -28,6 +28,7 @@ These are some of the larger projects that I have worked on recently. You can fi
 => /projects/madlad.html Madlad - A modular text editor for Unix
 => /projects/ozpex-micro.html Ozpex Micro - An 8-bit computer architecture designed for extensibility
 => /projects/os-micro.html OS/Micro - A full operating system stack and programming language for the Ozpex Micro
+=> /projects/quadraserve.html Quadraserve - A 4-protocol web server that supports CGI-like scripts
 
 => https://github.com/beauconstrictor My Github profile
 
@@ -37,7 +38,7 @@ I am a self-taught software developer, and have been for 6 years. I got started 
 
 This has since led me down a rabbit-hole of learning C, and eventually Assembly (albeit for the 6502 and Z80 architectures), which has undoubtedly improved my understanding of the workings of CPUs - but a functioning machine is more than just a CPU. 
 
-This lead me to create the Ozpex Micro, where I have designed and implemented an emulator for an entirely custom computer architecture and written a BIOS, bootloader, kernel, filesystem and programming language entirely from scratch, all in assembly to run on that system.
+So I created the 'Ozpex' family of projects, where I designed and implemented an emulator for an entirely custom computer architecture and have written a BIOS, bootloader, kernel, filesystem and programming language entirely from scratch, all in assembly to run on that system.
 
 ## Contact me
 

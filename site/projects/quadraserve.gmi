@@ -1,0 +1,45 @@
+# Quadraserve
+
+Quadraserve is a small server that implements 4 different protocols and serves your pages over them simultaneously.
+
+```
+             _                                      _
+        ~0  (_|  . - ' - . _ . - ' - . _ . - ' - . |_)  O
+       |(_~|^~~|                                  |~~^|~_)|
+       TT/_ T"T                                    T"T _\HH
+jgs^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+```
+
+Quadraserve supports:
+
+* HTTP(S) - The classic and by far most common protocol
+* Gemini  - A modern, aggressively minimalist alt-web protocol
+* Gohper  - An old competitor of HTTP from back in the day
+* Finger  - Because Quadraserve sounded better than Triserve
+
+Quadraserve is primarily a static web server that serves files from a directory, much like Python's 'http.server'. However, you do have access to more interactive functionality, available from all 4 protocols (a major challenge in it's own right - I'm looking at you, Finger) through a system akin to CGI.
+
+=> https://github.com/beauconstrictor/Quadraserve Quadraserve on Github
+
+## Modules
+
+Quadraserve's interactivity comes from a system of 'modules', which behave like API endpoints that send and recieve strings of text (both optional). Pages can have buttons and forms of sorts in the form of links to modules, which are automatically recognised and prompt the user for input before calling the endpoint and displaying the result.
+
+Modules can be used for a variety of simple systems, all in-keeping with the small-web feel of Quadraserve. Some examples:
+
+* A contact form
+* A comment system
+* A text adventure game!
+* etc.
+
+## Implementation
+
+Quadraserve is implemented in Nim, a fast compiled language with Python-like syntax. Nim is my go-to language for more complex software or programs involving networking (networking in C is a huge headache).
+
+=> https://nim-lang.org The Nim programming language
+
+Each protocol handler compiles down to a separate binary which are all statically linked to the common core, 'content.nim', which implements routing and modules.
+
+Gemini is the most first-class protocol, as pages are written in Gemtext, the protocol's markup language. The module system also naturally translate to Gemini's special response codes that request the client for user input.
+
+For other protocols, the Gemtext source is translated on-the-fly to the protocols most appropriate format and then the response is sent. For Gopher and Finger, the source is more-or-less downgreaded to plaintext. For HTTP, the source is converted to markup and inserted into a page template, which you can design yourself. A template is also provided that resembles the page your own right now!
