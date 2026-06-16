@@ -1,6 +1,6 @@
 # OS/Micro
 
-OS/Micro is a disk operating system for the Ozpex Micro computer architecture.
+OS/Micro is an exokernel-style DOS and for the Ozpex Micro computer architecture.
 
 ```
                           _______
@@ -39,6 +39,12 @@ I started OS/M (and the entirety of the Ozpex Micro) after discovering the Forth
 * DX - OS/M is a refreshingly easy system to target, without complex APIs or legacy mess.
 * Custom filesystem - OS/M uses a custom designed flat filesystem known as FS/128 that fits perfectly on Ozpex Micro disks and is incredibly simple and fast.
 * Simplicity - A single person can easily understand the entire OS stack, making OS/M a great learning tool if you want to read open source code.
+
+## Exokernel
+
+OS/M is implemented as an 'exokernel', a kernel that minimises hardware abstraction, as the Ozpex Micro's device model usually includes all the abstraction necessary for portable programs. This keeps the implementation simple and makes it easy to cross-compile programs for the OS without special tooling (as there is no executable format, per-se) as long as the required libraries are present.
+
+=> https://en.wikipedia.org/wiki/Exokernel Exokernels on Wikipedia
 
 ## Implementation
 
