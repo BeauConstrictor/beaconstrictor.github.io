@@ -3,6 +3,7 @@
 # chef - A gemtext -> HTML template processor
 
 from typing import TextIO
+from pathlib import Path
 import argparse
 
 def parse_args() -> argparse.Namespace:
@@ -171,8 +172,7 @@ def main() -> None:
     if args.format == "gophermap":
         path = Path(outfile)
         if path.name == "index":
-            path.rename(path.with_name("gophermap"))
-            outfile = str(path)
+            outfile = str(path.with_name("gophermap"))
 
     with open(args.outfile, "w", encoding="utf-8") as out:
         out.write(output)
