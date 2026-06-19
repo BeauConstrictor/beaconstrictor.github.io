@@ -40,7 +40,7 @@ def wrap(s: str, w: int) -> list[str]:
     if line:
         lines.append(line)
 
-   return lines
+    return lines
 
 def tohtml(gem: str) -> (str, str):
     preformatted = False
