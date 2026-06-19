@@ -41,6 +41,7 @@ def wrap(s: str, w: int) -> list[str]:
         lines.append(line)
 
     return lines
+
 def tohtml(gem: str) -> (str, str):
     preformatted = False
     in_list = False
@@ -111,7 +112,7 @@ def add_heading(output: list[str], l: str, border: str, prefix: str, width: int,
         output.append(text_mode + line)
     output.append(text_mode + border * llen)
 
-def add_gopher_link(output: list[str], l: str, width: int) -> None:
+def add_gopher_link(output: list[str], l: str, width: int, gophernicus: bool) -> None:
     parts = l[3:].split(" ")
     if len(parts) == 0: return
     url  = parts[0]
@@ -119,15 +120,15 @@ def add_gopher_link(output: list[str], l: str, width: int) -> None:
 
     if url.startswith("https://") or url.startswith("mailto:"):
         for name_l in name:
-            output.append(f"h{name_l}\t{url}\t_\t_")
+            output.append(f"\th{name_l}\t{url}\t_\t_")
     elif url.endswith(".gmi"):
         selector = url[:-4]
         for name_l in name:
-            output.append(f"1{name_l}\t{selector}")
+            output.append(f"\t1{name_l}\t{selector}")
     # TODO: support .txt files
     else:
         for name_l in name:
-            output.append(f"9{name_l}\t{url}")
+            output.append(f"\t9{name_l}\t{url}")
 
 def format_html(source: str, args: argparse.Namespace) -> str:
     with open(args.template, "r", encoding="utf-8") as f:
@@ -164,7 +165,7 @@ def format_gopher(source: str, args: argparse.Namespace, gophernicus: bool) -> s
             add_heading(output, l, ".", "### ", args.wrap, gophernicus)
 
         elif l.startswith("=> "):
-            add_gopher_link(output, l, args.wrap)
+            add_gopher_link(output, l, args.wrap, gophernicus)
 
         elif l == "":
             output.append(text_mode)
