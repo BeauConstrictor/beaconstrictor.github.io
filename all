@@ -32,6 +32,8 @@ def main():
             (OUT_DIR / "html" / rel).mkdir(parents=True, exist_ok=True)
             (OUT_DIR / "gemini" / rel).mkdir(parents=True, exist_ok=True)
             (OUT_DIR / "gopher" / rel).mkdir(parents=True, exist_ok=True)
+            with open(str(OUT_DIR / "gopher" / rel / "gophermap"), "w") as f:
+                f.write("!Welcome\nWelcome to my site!\n\t1\tindex\tGo to the index")
             continue
 
         # Compute output paths
