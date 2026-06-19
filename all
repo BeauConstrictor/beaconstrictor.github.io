@@ -20,10 +20,14 @@ def run_chef(fmt: str, out: Path, src: Path):
         check=True
     )
 
+gophermap_msg = "!Welcome\nWelcome to my site!\n\t1\tindex\tGo to the index"
 
 def main():
     if OUT_DIR.exists():
         shutil.rmtree(OUT_DIR)
+
+    with open(str(OUT_DIR / "gopher" / "gophermap"), "w") as f:
+        f.write(gopermap_msg)
 
     for path in IN_DIR.rglob("*"):
         rel = path.relative_to(IN_DIR)
@@ -33,7 +37,7 @@ def main():
             (OUT_DIR / "gemini" / rel).mkdir(parents=True, exist_ok=True)
             (OUT_DIR / "gopher" / rel).mkdir(parents=True, exist_ok=True)
             with open(str(OUT_DIR / "gopher" / rel / "gophermap"), "w") as f:
-                f.write("!Welcome\nWelcome to my site!\n\t1\tindex\tGo to the index")
+                f.write(gopermap_msg)
             continue
 
         # Compute output paths
