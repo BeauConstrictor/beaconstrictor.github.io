@@ -25,8 +25,21 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 def wrap(s: str, w: int) -> list[str]:
-    return [s[i:i+w] for i in range(0, len(s), w)]
+    words = s.split()
+    lines = []
+    line = ""
 
+    for word in words:
+        if len(line) + len(word) + (1 if line else 0) <= w:
+            line += (" " if line else "") + word
+        else:
+            lines.append(line)
+            line = word
+
+    if line:
+        lines.append(line)
+
+    return lines
 def tohtml(gem: str) -> (str, str):
     preformatted = False
     in_list = False
