@@ -147,8 +147,9 @@ def format_gemtext(source: str, args: argparse.Namespace) -> str:
 def format_gopher(source: str, args: argparse.Namespace) -> str:
     output = []
 
+    preformatted = False
+
     for l in source.split("\n"):
-        preformatted = False
         if l.startswith("```"):
             preformatted = not preformatted
             continue
