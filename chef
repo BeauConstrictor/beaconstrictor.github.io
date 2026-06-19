@@ -145,7 +145,7 @@ def format_gopher(source: str, args: argparse.Namespace) -> str:
             add_heading(output, l, "-", "### ", args.wrap)
 
         elif l.startswith("=> "):
-            add_gopher_link(output, args.wrap)
+            add_gopher_link(output, l, args.wrap)
 
         elif l == "":
             output.append("i")
