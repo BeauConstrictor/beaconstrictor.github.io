@@ -65,8 +65,8 @@ def main():
         print(f"{path} -> {html_rel}")
 
         run_chef("html", html_out, path, ROOT / rel)
-        run_chef("gemtext", gem_out, path, ROOT / rel)
-        run_chef("gophermap", gopher_out, path, ROOT / rel)
+        run_chef("gemini", gem_out, path, ROOT / rel)
+        run_chef("gopher", gopher_out, path, ROOT / rel)
 
 
 if __name__ == "__main__":
