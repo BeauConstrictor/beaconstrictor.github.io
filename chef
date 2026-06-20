@@ -122,20 +122,23 @@ def add_gopher_link(output: list[str], l: str, width: int, hostname: str, path: 
     if url.startswith("https://"):
         for name_l in name:
             parsed = urlparse(url)
-            s = f"h{name_l}\t{parsed.path}\t{parsed.hostname}"
-            if parsed.port: s += f"\t{parsed.port}"
+            s = f"h{name_l}\t{parsed.path}\t{parsed.hostname}\t"
+            if parsed.port:
+                s += str(parsed.port)
+            else:
+                s += "443"
             output.append(s)
     elif url.startswith("gopher://"):
         output.append("iTODO: implement gopher links from gopher")
     elif url.startswith("gemini://"):
         output.append("iTODO: implement gemini links from gopher")
     elif url.endswith(".gmi"):
-        selector = Path(url[:-4]).relative_to(path)
+        selector = Path(path) / Path(url[:-4])
         for name_l in name:
             output.append(f"1{name_l}\t{selector}\t{hostname}\t70")
     # TODO: support .txt files
     else:
-        selector = Path(url).relative_to(path)
+        selector = Path(path) / Path(url)
         for name_l in name:
             output.append(f"9{name_l}\t{selector}{hostname}\t70")
 

@@ -15,6 +15,8 @@ VARS = [
 
 HOSTNAME = "tilde.team"
 
+ROOT = Path("/~beauconstrictor")
+
 def run_chef(fmt: str, out: Path, src: Path, online_path: Path):
     out.parent.mkdir(parents=True, exist_ok=True)
     subprocess.run(
@@ -62,9 +64,9 @@ def main():
 
         print(f"{path} -> {html_rel}")
 
-        run_chef("html", html_out, path, rel)
-        run_chef("gemtext", gem_out, path, rel)
-        run_chef("gophermap", gopher_out, path, rel)
+        run_chef("html", html_out, path, ROOT / rel)
+        run_chef("gemtext", gem_out, path, ROOT / rel)
+        run_chef("gophermap", gopher_out, path, ROOT / rel)
 
 
 if __name__ == "__main__":
