@@ -191,7 +191,7 @@
 <body class="js-disabled">
     <header>
         <div class="header-content">
-            <a href="/">$(NAME)</a>
+            <a href="$(ROOT)">$(NAME)</a>
         </div>
     </header>
 
@@ -318,7 +318,7 @@
         updateColours(mediaQuery);
 
         const header = document.querySelector("header");
-        header.addEventListener("click", () => location.href = "/");
+        header.addEventListener("click", () => location.href = "$(ROOT)");
         header.style.cursor = "pointer";
     </script>
 </body>
