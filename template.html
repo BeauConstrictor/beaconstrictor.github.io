@@ -7,6 +7,70 @@
     <title>$(TITLE)</title>
 
     <style>
+        header {
+            background-color: #252422;
+        }
+
+        .header-content a {
+            color: #a89984;
+            font-family: sans-serif;
+        }
+
+        body {
+            background-color: #282724;
+            color: #e9cd96;
+        }
+
+        article pre {
+            scrollbar-color: #a89984;
+            color: #f3cc62;
+        }
+
+        article p, article pre, article a, article li {
+            margin-left: 20px;
+        }
+
+        article a {
+            text-decoration: none;
+            color: #fff7e6;
+            font-weight: 600;
+        }
+
+        article a:visited {
+            font-weight: 200;
+        }
+
+        article a::before, article li::before {
+            content: "> ";
+            display: block;
+            height: 0;
+            position: relative;
+            right: 2ch;
+            font-weight: 900;
+        }
+
+        article a::before {
+            content: "> ";
+            color: #458588;
+        }
+
+        article li::before {
+            content: "* ";
+            color: #f3cc62;
+        }
+
+        article li {
+            list-style: none;
+        }
+
+        article a:visited {
+            color: #b16286;
+        }
+
+        h1,h2,h3 {
+          color: #fff7e6;
+        }
+
         :root {
             font-size: 15px;
         }
@@ -27,7 +91,8 @@
             padding: 30px;
 
             margin: auto;
-            font-family: serif;
+
+            font-family: monospace;
 
             padding-top: 60px;
             padding-bottom: 200px;
@@ -39,28 +104,13 @@
             font-size: 1.1rem;
         }
 
-        article li::marker {
-            content: "\2736  ";
-        }
-
         article ul {
             padding: 7px;
-        }
-
-        article h1,
-        article h2,
-        article h3,
-        article h4,
-        article h5,
-        article h6 {
-            font-family: sans-serif;
         }
 
         article h1 {
             font-size: 2rem;
             padding-bottom: 10px;
-            border-bottom-width: 1px;
-            border-bottom-style: solid;
         }
 
         article h2 {
@@ -71,16 +121,13 @@
             font-size: 0.9rem;
             padding: 20px 0;
             overflow-x: auto;
-            font-weight: 700;
-            color: #a89984;
         }
 
         article a {
             display: block;
-            font-family: sans-serif;
-            font-weight: 600;
             cursor: pointer;
-            margin: 10px 0;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
 
         header {
@@ -106,7 +153,6 @@
         .header-content a {
             font-size: 1.6rem;
             text-transform: uppercase;
-            font-family: sans-serif;
             text-decoration: none;
             float: right;
         }
@@ -118,72 +164,16 @@
             display: block;
         }
 
-        @media screen and (max-width: 70ch) {
+        @media screen and (max-width: 90ch) {
             .header-content {
                 max-width: calc(70ch - 250px);
             }
         }
 
-        @media (prefers-color-scheme: light) {
-            header {
-                background-color: #f9f5d7;
-            }
-
-            .header-content a {
-                color: #7c6f64;
-            }
-
-            body {
-                background-color: #fbf1c7;
-                color: #3c3836;
-            }
-
-            article pre {
-                scrollbar-color: #7c6f64 #f9f5d7;
-            }
-
-            article a {
-                color: #458588;
-            }
-
-            article a:visited {
-                color: #b16286;
-            }
-
-            article h1 {
-                border-color: #3c383611;
-            }
-        }
-
-        @media (prefers-color-scheme: dark) {
-            header {
-                background-color: #1d2021;
-            }
-
-            .header-content a {
-                color: #a89984;
-            }
-
-            body {
-                background-color: #282828;
-                color: #ebdbb2;
-            }
-
-            article pre {
-                scrollbar-color: #a89984 #282828;
-            }
-
-            article a {
-                color: #458588;
-            }
-
-            article a:visited {
-                color: #b16286;
-            }
-
-            article h1 {
-                border-color: #ebdbb211;
-            }
+        small {
+          opacity: 0.3;
+          position: relative;
+          top: 100px;
         }
     </style>
 </head>
@@ -197,6 +187,10 @@
 
     <article>
         $(CONTENT)
+
+        <center>
+          <small>Modified at $(MTIME) on $(MDATE)</small>
+        </center>
     </article>
 
     <script>
@@ -209,19 +203,7 @@
             "#8ec07c",
             "#d65d0e",
         ];
-        const darkBg = "#1d2021";
-
-        const lightColours = [
-            "#9d0006",
-            "#79740e",
-            "#b57614",
-            "#076678",
-            "#8f3f71",
-            "#427b58",
-            "#d65d0e",
-        ];
-        const lightBg = "#f9f5d7";
-
+        const darkBg = "#252422";
 
         const size = 40;
         const cells = 5;
@@ -309,13 +291,7 @@
             setFavicon(identicon);
         }
 
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        function updateColours(e) {
-            if (e.matches) drawIdenticon(darkBg, darkColours);
-            else drawIdenticon(lightBg, lightColours);
-        }
-        mediaQuery.addEventListener('change', updateColours);
-        updateColours(mediaQuery);
+        drawIdenticon(darkBg, darkColours);
 
         const header = document.querySelector("header");
         header.addEventListener("click", () => location.href = "$(ROOT)");

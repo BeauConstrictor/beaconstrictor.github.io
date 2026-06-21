@@ -2,10 +2,29 @@
 
 # chef - A gemtext -> HTML/gemini/gopher processor
 
+from datetime import datetime, timezone
 from urllib.parse import urlparse
 from typing import TextIO
 from pathlib import Path
+import subprocess
 import argparse
+import os.path
+
+def get_git_mtime(path: str) -> datetime | None:
+    try:
+        output = subprocess.check_output(
+            ["git", "log", "-1", "--format=%ct", "--", path],
+            text=True
+        ).strip()
+
+        if not output:
+            return None
+
+        timestamp = int(output)
+        return datetime.fromtimestamp(timestamp, tz=timezone.utc)
+
+    except subprocess.CalledProcessError:
+        return datetime.now()
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -197,6 +216,10 @@ def main() -> None:
         case "html":      output = format_html  (source, args)
         case "gemini":    output = format_gemini(source, args)
         case "gopher": output = format_gopher(source, args)
+
+    mtime = datetime.fromtimestamp(os.path.getmtime(args.gemtext))
+    args.define.append(("MDATE", f"{mtime.day} {mtime.strftime('%B %Y')}"))
+    args.define.append(("MTIME", mtime.strftime(f"%H:%M")))
 
     for k,v in args.define:
         output = output.replace(f"$({k})", v)
