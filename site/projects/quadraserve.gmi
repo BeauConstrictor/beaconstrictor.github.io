@@ -17,6 +17,9 @@ Quadraserve supports:
 * Gopher  - An old competitor of HTTP from back in the day
 * Finger  - Because Quadraserve sounded better than Triserve
 
+=> gemini://geminiprotocol.net The Gemini protocol
+=> gopher://gopher.floodgap.com The Gopher protocol
+
 Quadraserve is primarily a static web server that serves files from a directory, much like Python's 'http.server'. However, you do have access to more interactive functionality, available from all 4 protocols (a major challenge in it's own right - I'm looking at you, Finger) through a system akin to CGI.
 
 => https://github.com/beauconstrictor/Quadraserve Quadraserve on Github

@@ -2,6 +2,7 @@
 
 # chef - A gemtext -> HTML/gemini/gopher processor
 
+from urllib.parse import urlparse, urlunparse, quote, urljoin
 from datetime import datetime, timezone
 from urllib.parse import urlparse
 from typing import TextIO
@@ -9,6 +10,9 @@ from pathlib import Path
 import subprocess
 import argparse
 import os.path
+
+GEMINI_PROXY = "https://portal.mozz.us/gemini/"
+GOPHER_PROXY = "https://portal.mozz.us/gopher/"
 
 def get_git_mtime(path: str) -> datetime | None:
     try:
@@ -45,6 +49,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("-O", "--online_path", required=True)
 
     return parser.parse_args()
+
+def is_relative(url):
+    return not url.scheme and not url.netloc
 
 def wrap(s: str, w: int) -> list[str]:
     words = s.split()
@@ -108,11 +115,20 @@ def tohtml(gem: str) -> (str, str):
         elif l.startswith("=> "):
             parts = l[3:].split(" ")
             if len(parts) == 0: continue
-            url = parts[0]
-            if not "://" in url and url.endswith(".gmi"):
-                url = url[:-4] + ".html"
-            text = " ".join(parts[1:]) if len(parts) > 1 else url
-            html_parts.append(f"<a href=\"{url}\">{text}</a>")
+            url_str = parts[0]
+            url = urlparse(parts[0])
+            text = " ".join(parts[1:]) if len(parts) > 1 else url_str
+            if is_relative(url) and url.path.endswith(".gmi"):
+                url_str = url_str[:-4] + ".html"
+            elif url.scheme == "gemini":
+                url_str = urljoin(GEMINI_PROXY,
+                                  quote(url.hostname),
+                                  quote(url.path, safe="/"))
+            elif url.scheme == "gopher":
+                url_str = urljoin(GOPHER_PROXY,
+                                  quote(url.hostname),
+                                  quote(url.path, safe="/"))
+            html_parts.append(f"<div><a href=\"{url_str}\">{text}</a></div>")
 
         elif l.strip() == "":
             continue
